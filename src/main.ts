@@ -1,15 +1,13 @@
 import $ from 'jquery';
-import './styles.css';
+import dayjs from 'dayjs';
 import DataTable, {type Api} from 'datatables.net-dt';
-//import relativeTime from 'dayjs/plugin/relativeTime';
+import './styles.css';
 import type { ExamRequest, NewExamRequest, Student, Course, ValidationResult } from './types';
 import { store } from './data';
-import dayjs from 'dayjs';
 
 let exam_request_data: ExamRequest[] = [];
-//let filter:string = '';
 let currentRequestsDataTable: Api<ExamRequest>;
-
+//let filter:string = '';
 
 // const searchRequests = (er: ExamRequest, f:string): boolean => {
 // 	f = f.toLowerCase();
@@ -185,7 +183,6 @@ function bindForm():void {
 		} else {
 			$('#resultMessage').text('There was a problem submitting the request').css('color', 'red');
 		}
-		
 	})
 }
 function populateStudentSelect(students:Student[]): void {
