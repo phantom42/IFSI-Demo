@@ -42,12 +42,10 @@ export async function createExamRequest(formInput: NewExamRequest): Promise<bool
 			notes: formInput.notes ?? null
 		}
 		const saved = await store.saveRequest(newRequest);
-		console.log('saved',saved);
 		exam_request_data.push(newRequest);
 		currentRequestsDataTable.row.add(saved).draw(false);
 		return true;
 	} catch(error) {
-		console.log('error', error);
 		return false;
 	}
 }
@@ -127,7 +125,6 @@ function validateRequest(): ValidationResult {
 			errors.push(field);
 			$(field).css('border-color', 'red');
 			$(field).siblings('.form-error:not(.date-error)').addClass('visible');
-			
 		}
 	})
 	if (errors.includes('#request_date') == false) {
@@ -173,7 +170,6 @@ function bindForm():void {
 		e.preventDefault();
 		const submission: NewExamRequest = readForm();
 		const isValid:ValidationResult = validateRequest()
-		console.log(isValid);
 		if (!isValid.is_valid){
 			if (isValid.errors?.length && isValid.errors.length > 0){
 				$('#resultMessage').text((isValid.errors.length > 1 ? 'There were errors' : 'There was an error') + ' in your submission').css('color','red');
@@ -182,7 +178,6 @@ function bindForm():void {
 			return ;
 		} 
 			
-		
 		const saved = await createExamRequest(submission);
 		if (saved) {
 			$('#resultMessage').text('The request was successfully submitted').css('color', 'green');
@@ -216,6 +211,4 @@ $(async()=>{
 	$('#request_date').attr('min', today);
 	initTable();
 	bindForm();
-	
-	//currentRequestsDataTable.clear().rows.add(exam_request_data).draw();
 })
