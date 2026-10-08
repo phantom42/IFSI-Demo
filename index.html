@@ -4,8 +4,72 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IFSI</title>
+	<link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css" />
+	
   </head>
   <body>
+	<div class="submission-form" id="submission-form">
+
+		<div class="heading">New Exam Request</div>
+		<form id="requestForm" novalidate class="form">
+				<div id="resultMessage"></div>
+				<input type="hidden" name="method" value="submitRequest"/>
+				<!-- build the form here -->
+				<div class="form-group">
+					<label for="student_id">Student*:</label>
+					<select class="form-select" id="student_id" name="student_id">
+						<option value="">Choose One</option>
+						<!-- <cfoutput query="qryStudents">
+							<option value="#qryStudents.student_id#">#qryStudents.last_name#, #qryStudents.first_name#</option>
+						</cfoutput> -->
+					</select>
+					<div class="form-error">Student must be selected</div>
+				</div>
+				<div class="form-group">
+					<label for="course_code">Course*:</label>
+					<select class="form-select" id="course_code" name="course_code">
+						<option value="">Choose One</option>
+						<!-- <cfoutput query="qryCourses">
+							<option value="#qryCourses.course_code#">#qryCourses.course_name#</option>
+						</cfoutput> -->
+					</select>
+					<div class="form-error">Course must be selected</div>
+				</div>
+				<div class="form-group">
+					<label for="request_date">Requested Date*:</label>
+					<input type="date" class="form-date" id="request_date" name="request_date" />
+					<div class="form-error">Date must be selected</div>
+					<div class="form-error date-error">Invalid Date</div>
+				</div>
+				<div class="form-group">
+					<label for="needs_accommodation">Needs Testing Accommodation:</label>
+					<input type="checkbox" class="form-checkbox" value="1" id="needs_accommodation" name="needs_accommodation"/>
+				</div>
+				<div class="form-group">
+					<label for="notes">Notes:</label>
+					<textarea name="notes" id="notes" class="form-textarea" placeholder="Optional notes"></textarea>
+				</div>
+				<div class="form-actions">
+					<input type="submit"  class="form-button" name="submit" id="requestSubmit" value="Submit Request" />
+				</div>
+			</form>
+	</div>
+	<hr/>
+	<div class="datatable-wrapper">
+		<div class="heading">Current Requests</div>
+		<table id="current_requests" class="display order-column">
+			<thead>
+				<th>Student</th>
+				<th>Course</th>
+				<th><span class="label-short">Date</span><span class="label-full">Request Date</span></th>
+				<th>Status</th>
+				<th><span class="label-short">Accom.</span><span class="label-full">Needs Accommodation</span></th>
+			</thead>
+			<tbody id="filtered_requests">
+				
+			</tbody>
+		</table>
+	</div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

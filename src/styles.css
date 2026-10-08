@@ -1,0 +1,130 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 2rem;
+}
+
+/* ---------- Request form ---------- */
+
+.submission-form {
+	container-type: inline-size; /* lets the form react to its own width */
+	max-width: 52rem;
+	border: 5px solid #1a263a;
+}
+.heading {
+	background-color: #1a263a;
+	color: white;
+	padding: .5em;
+	font-weight: bold;
+	font-size: larger;
+}
+
+/* Desktop: label | input | error */
+.form {
+	display: grid;
+	grid-template-columns: max-content minmax(10rem, 18rem) 1fr;
+	column-gap: 1rem;
+	row-gap: .75rem;
+	padding: 1em;
+}
+
+/* Each group spans the full row and reuses the form's columns,
+   so every label/input/error lines up across groups. */
+.form-group {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: subgrid;
+	align-items: center;
+	row-gap: .25rem;
+}
+.form-group label {
+	grid-column: 1;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+	grid-column: 2;
+	width: 100%;
+	min-width: 0; /* let long select options shrink instead of widening the column */
+	box-sizing: border-box;
+	font: inherit;
+}
+.form-group .form-checkbox {
+	width: auto;
+	justify-self: start;
+	margin: 0;
+}
+
+.form-error {
+	display: none;
+	grid-column: 3;
+	justify-self: start;
+	background-color: lightpink;
+	padding: .1em .5em;
+}
+.form-error.visible {
+	display: block;
+}
+
+#resultMessage {
+	grid-column: 1 / -1;
+	font-size: large;
+}
+#resultMessage:empty {
+	display: none; /* no empty grid row when there's no message */
+}
+
+.form-actions {
+	grid-column: 2;
+}
+.form-button {
+	border-radius: 15px;
+	background-color: #e6e6e6;
+	border: 1px solid #adadad;
+	color: #333;
+	padding: .5em;
+	transform: scale(1);
+	transition: transform 0.1s ease-in, background-color 0.1s ease-in;
+}
+.form-button:hover {
+	cursor: pointer;
+	color: #fff;
+	background-color: #337ab7;
+	border-color: #2e6da4;
+	transform: scale(1.1);
+}
+
+/* Narrow form: label | input, errors drop below their input */
+@container (max-width: 40rem) {
+	.form {
+		grid-template-columns: minmax(6rem, 35%) minmax(0, 1fr);
+	}
+	.form-error {
+		grid-column: 2;
+	}
+}
+
+/* ---------- Requests table ---------- */
+
+.datatable-wrapper {
+	width: 50%;
+	overflow-x: auto; /* table scrolls inside its box instead of widening the page */
+	border: 5px solid #1a263a;
+}
+.label-short {
+	display: none;
+}
+
+@media (max-width: 600px) {
+	body {
+		margin: 1rem;
+	}
+	.datatable-wrapper {
+		width: 100%;
+	}
+	.label-full {
+		display: none;
+	}
+	.label-short {
+		display: inline;
+	}
+}
