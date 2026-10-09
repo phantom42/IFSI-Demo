@@ -176,7 +176,7 @@ function bindForm():void {
 			return ;
 		} 
 			
-		const saved = await createExamRequest(submission);
+		const saved:boolean = await createExamRequest(submission);
 		if (saved) {
 			$('#resultMessage').text('The request was successfully submitted').css('color', 'green');
 			$('#requestForm').trigger('reset');
@@ -199,9 +199,9 @@ function populateCourseSelect(courses:Course[]): void{
 }
 $(async()=>{
 	exam_request_data = await store.loadRequests();
-	const students = getStudents(exam_request_data);
+	const students: Student[] = getStudents(exam_request_data);
 	populateStudentSelect(students);
-	const courses = getCourses(exam_request_data);
+	const courses: Course[] = getCourses(exam_request_data);
 	populateCourseSelect(courses);
 	const today: string = new Date().toISOString().split('T')[0];
 
