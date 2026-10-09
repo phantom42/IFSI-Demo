@@ -55,15 +55,21 @@
 			</form>
 	</div>
 	<hr/>
-	<div class="datatable-wrapper">
+	<div class="table-wrapper">
 		<div class="heading">Current Requests</div>
-		<table id="current_requests" class="display order-column">
+		<div id="request-search">
+			<label for="request_filter">Filter Requests</label><input type="text" name="request_filter" id="request_filter" />
+		</div>
+		<table id="current_requests" class="">
 			<thead>
-				<th>Student</th>
-				<th>Course</th>
-				<th><span class="label-short">Date</span><span class="label-full">Request Date</span></th>
-				<th>Status</th>
-				<th><span class="label-short">Accom.</span><span class="label-full">Needs Accommodation</span></th>
+				<tr>
+
+					<th>Student</th>
+					<th>Course</th>
+					<th><span class="label-short">Date</span><span class="label-full">Request Date</span></th>
+					<th>Status</th>
+					<th><span class="label-short">Accom.</span><span class="label-full">Needs Accommodation</span></th>
+				</tr>
 			</thead>
 			<tbody id="filtered_requests">
 				

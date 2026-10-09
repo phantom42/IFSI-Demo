@@ -8,7 +8,7 @@ https://ifsi-demo.vercel.app/
 
 # Approach
 
-The brief did not specify that the user should be able to create new students or courses. I opted to ensure data integrity by forcing the user to select from valid options. With more time and data, I would use a text input that searches and suggests students and courses. I would also write unit tests. I initially began writing a custom filter for the request table but decided to not reinvent the wheel and opted to use DataTables as it fulfilled all of the functional requirements.
+The brief did not specify that the user should be able to create new students or courses. I opted to ensure data integrity by forcing the user to select from valid options. With more time and data, I would use a text input that searches and suggests students and courses. I would also write unit tests. In a real world scenario, I would probably suggest using DataTables instead of building a custom search filter.
 
 # Tools + AI
 

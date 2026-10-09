@@ -1,24 +1,23 @@
 import $ from 'jquery';
 import dayjs from 'dayjs';
-import DataTable, {type Api} from 'datatables.net-dt';
 import './styles.css';
 import type { ExamRequest, NewExamRequest, Student, Course, ValidationResult } from './types';
 import { store } from './data';
 
 let exam_request_data: ExamRequest[] = [];
-let currentRequestsDataTable: Api<ExamRequest>;
-//let filter:string = '';
+let filter:string = '';
 
-// const searchRequests = (er: ExamRequest, f:string): boolean => {
-// 	f = f.toLowerCase();
-// 	if (er.first_name.toLowerCase().includes(f)) return true;
-// 	if (er.last_name.toLowerCase().includes(f)) return true;
-// 	if (er.fire_department!== null && er.fire_department.toLowerCase().includes(f)) return true;
-// 	if (er.course_code.toLowerCase().includes(f)) return true ;
-// 	if (er.course_name.toLowerCase().includes(f)) return true ;
-// 	if (er.notes !== null && er.notes.toLowerCase().includes(f)) return true ;
-// 	return false 
-// }
+const searchRequests = (er: ExamRequest): boolean => {
+	const f = filter.toLowerCase();
+	if (er.first_name.toLowerCase().includes(f)) return true;
+	if (er.last_name.toLowerCase().includes(f)) return true;
+	if (er.fire_department!== null && er.fire_department.toLowerCase().includes(f)) return true;
+	if (er.course_code.toLowerCase().includes(f)) return true ;
+	if (er.course_name.toLowerCase().includes(f)) return true ;
+	const compareNotes = er.notes ?? '';
+	if (compareNotes.toLowerCase().includes(f)) return true ;
+	return false 
+}
 
 export async function createExamRequest(formInput: NewExamRequest): Promise<boolean> {
 	try {
@@ -39,9 +38,10 @@ export async function createExamRequest(formInput: NewExamRequest): Promise<bool
 			needs_accommodation: formInput.needs_accommodation ?? 0,
 			notes: formInput.notes ?? null
 		}
-		const saved = await store.saveRequest(newRequest);
+		await store.saveRequest(newRequest);
 		exam_request_data.push(newRequest);
-		currentRequestsDataTable.row.add(saved).draw(false);
+		renderRequests();
+		//currentRequestsDataTable.row.add(saved).draw(false);
 		return true;
 	} catch(error) {
 		return false;
@@ -84,25 +84,30 @@ function getCourses(requests:ExamRequest[]): Course[]{
 	)
 }
 
-function initTable():void{
-	currentRequestsDataTable = new DataTable('#current_requests', {
-		data: exam_request_data,
-		columns: [
-			{data: null, render: (_d, _t, r: ExamRequest) => `${r.last_name}, ${r.first_name}`},
-			{data: null, render: (_d, _t, r: ExamRequest) => `${r.course_name} (${r.course_code})`},
-			{data: 'request_date'},
-			{data: 'status'},
-			{data: 'needs_accommodation', render: (v: boolean) => (v ? 'Yes' : 'No')},
-		],
-		language: {
-			search: 'Filter Requests:'
-		},
-		layout: {
-			topStart: null,
-			topEnd: 'search',
-	
-		}
-	});
+function renderRequests():void {
+	let filtered_requests:ExamRequest[] = exam_request_data;
+	if (filter.length) {
+		filtered_requests = exam_request_data.filter(searchRequests);
+	} 
+	const fr = $("#filtered_requests");
+	$(fr).empty();
+	filtered_requests.forEach(er => {
+		const nr = $(`<tr></tr>`);
+		const notes = er.notes?.trim();
+		if (notes) nr.attr('title', notes);
+		const student = $(`<td>${er.last_name}, ${er.first_name}</td>`);
+		const course = $(`<td>${er.course_name} (${er.course_code})</td>`);
+		const request_date = $(`<td>${er.request_date}</td>`);
+		const status = $(`<td>${er.status}</td>`);
+		const needs_accommodation = $(`<td class='centered'>${(er.needs_accommodation)? 'Yes':'No'}</td>`);
+		nr
+			.append(student)
+			.append(course)
+			.append(request_date)
+			.append(status)
+			.append(needs_accommodation);
+		fr.append(nr);
+	})
 }
 function resetValidation() {
 	$('#resultMessage').removeClass('visible');
@@ -188,13 +193,19 @@ function bindForm():void {
 function populateStudentSelect(students:Student[]): void {
 	students.forEach(student => {
 		let display:string = `${student.last_name}, ${student.first_name}`;
-		$('#student_id').append($('<option/>').val(student.student_id).html(display));
+		$('#student_id').append($('<option/>').val(student.student_id).text(display));
 	})
 }
 function populateCourseSelect(courses:Course[]): void{
 	courses.forEach(course => {
 		let display: string = `${course.course_name} (${course.course_code})`;
-		$('#course_code').append($('<option/>').val(course.course_code).html(display));
+		$('#course_code').append($('<option/>').val(course.course_code).text(display));
+	})
+}
+function bindSearch():void{
+	$('#request_filter').on('input',(event) => {
+		filter = String($(event.currentTarget).val()?? '');
+		renderRequests();
 	})
 }
 $(async()=>{
@@ -206,6 +217,7 @@ $(async()=>{
 	const today: string = new Date().toISOString().split('T')[0];
 
 	$('#request_date').attr('min', today);
-	initTable();
+	renderRequests();
 	bindForm();
+	bindSearch();
 })

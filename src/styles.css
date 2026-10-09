@@ -105,8 +105,8 @@ body {
 
 /* ---------- Requests table ---------- */
 
-.datatable-wrapper {
-	width: 50%;
+.table-wrapper {
+	width: fit-content;
 	overflow-x: auto; /* table scrolls inside its box instead of widening the page */
 	border: 5px solid #1a263a;
 }
@@ -118,13 +118,27 @@ body {
 	body {
 		margin: 1rem;
 	}
-	.datatable-wrapper {
-		width: 100%;
-	}
 	.label-full {
 		display: none;
 	}
 	.label-short {
 		display: inline;
 	}
+}
+
+tbody tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+td.centered {
+	text-align: center;
+}
+td {
+	padding: .5em;
+}
+#request-search {
+	padding: 1em;
+	background-color: #f2f2f2;
+}
+#request-search label {
+	padding-right: 1em;
 }
